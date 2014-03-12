@@ -38,3 +38,10 @@ body {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+.login-error{
+	padding-top:20px;
+	text-align: center;
+	font-size:14px;
+	color:red;
+}
+

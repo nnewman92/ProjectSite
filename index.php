@@ -1,12 +1,15 @@
 <!-- Aggregate Application Portal - Copyright 2014 of Natalie Newman -->
 <?php
+session_start();
 include "/includes/header.php";
 ?>
 
 <div class="jumbotron">
 	<h1>Title</h1>
 	<p>Text</p>
-	<?php echo $os?>
+
+<?php echo $os?>
+
 </div>
           
 <div class="row">

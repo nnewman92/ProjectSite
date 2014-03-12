@@ -28,7 +28,7 @@ else if(strpos($user_agent, "Android") !== FALSE) {
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Aggregate App Portal</title>
+		<title>Logged out of Aggregate App Portal</title>
         
 		<!-- Cite: Bootstrap responsive web design-->
 		<link href="css/bootstrap-theme.css" rel="stylesheet" type="text/css">
@@ -50,10 +50,8 @@ else if(strpos($user_agent, "Android") !== FALSE) {
 		</div>
 		<div class="collapse navbar-collapse">
 			<ul class="nav navbar-nav">
-				<li class="active"><a href="index.php">Home</a></li>
-            	<li><a href="userprofile.php">My Profile</a></li>
+				<li class="active"><a href="login.php">Login</a></li>
             	<li><a href="help.php">Help & Contact</a></li>
-                <li><a href="logout.php">Logout</a></li>
          	 </ul>
         </div><!-- /.nav-collapse -->
       </div><!-- /.container -->
