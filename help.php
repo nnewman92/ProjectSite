@@ -1,6 +1,6 @@
 <!-- Aggregate Application Portal - Copyright 2014 of Natalie Newman -->
 <?php
-include "/includes/header.php";
+include "includes/header.php";
 ?>
 
 <div class="jumbotron">
@@ -44,9 +44,9 @@ include "/includes/header.php";
 </div><!--/span-->
 
 <?php
-include "/includes/sidebar.php";
+include "includes/sidebar.php";
 ?>
 
 <?php
-include "/includes/footer.php";
+include "includes/footer.php";
 ?>

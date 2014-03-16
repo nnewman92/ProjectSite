@@ -31,15 +31,17 @@ require("includes/connect.php");
 
 //if an admin or user session is already in progress then dont let them log in, redirect to 'index.php'
 if (isset($_SESSION['admin']) && ($_SESSION['admin'] == true) || isset($_SESSION['user']) && ($_SESSION['user'] == true)) {
-	header ("Location: index.php"); 	
-	//if use not logged in then
-}else{
+    header ("Location: index.php");     
+    //if use not logged in then
+ }else
+    if ( trim($_POST['username_login']) AND trim($_POST['user_password']))
+    {
 	//if username and password are entered, blank before user fills form
 	$usr = (isset($_POST['username_login'])? $_POST['username_login']:null);
 	$pwd = (isset($_POST['user_password'])? $_POST['user_password']:null);
 
-	$usr = mysqli_escape_string($conn, $usr); //Prevent against SQL Injection by avoiding "\" being executed
-	$pwd = mysqli_escape_string($conn, $pwd); //Prevent against SQL Injection by avoiding "\" being executed
+	$usr = mysqli_escape_string($usr); //Prevent against SQL Injection by avoiding "\" being executed
+    $pwd = mysqli_escape_string($pwd); //Prevent against SQL Injection by avoiding "\" being executed
 
 	if ($usr && $pwd){	
 		$epwd = $pwd;
@@ -65,10 +67,10 @@ if (isset($_SESSION['admin']) && ($_SESSION['admin'] == true) || isset($_SESSION
 				header("Location: index.php");
 				$_SESSION['admin'] = true;
 			}else{ //Normal User
-				header ("Location: logout.php");
+				header ("Location: index.php");
 				$_SESSION['user'] = true;
 				$_SESSION['user'] = $dataBaseEmail;
-				}
+				}  
 			}else{//user and pass do not match DB
 				echo '<div class="login-error">Incorrect Password, try again</div>';	 
 			}
