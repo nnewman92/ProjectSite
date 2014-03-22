@@ -18,6 +18,9 @@ else if(strpos($user_agent, "iPad") !== FALSE) {
 else if(strpos($user_agent, "Android") !== FALSE) {
     $os = "Android";
 }
+else if(strpos($user_agent, "BlackBerry") !== FALSE) {
+    $os = "BlackBerry";
+}
 ?>
 
 

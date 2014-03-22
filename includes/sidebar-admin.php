@@ -1,7 +1,9 @@
 <!-- Aggregate Application Portal - Copyright 2014 of Natalie Newman -->
 <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
 	<div class="list-group">
-		<a href="adminmanageuser.php" class="list-group-item active">Manage Users</a>
+		<a href="admincreateuser.php" class="list-group-item active">Create User</a>
+        <a href="adminmanageuser.php" class="list-group-item"> Manager Users</a>
+        <a href="admincreateapp.php" class="list-group-item">Add Apps</a>
 		<a href="adminmanageapps.php" class="list-group-item">Manage Apps</a>
 		<a href="allapps.php" class="list-group-item">View all apps</a>
         <a href="device.php" class="list-group-item">Browse by device</a>

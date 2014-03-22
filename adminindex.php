@@ -3,6 +3,7 @@
 session_start();
 include "includes/header.php";
 include "includes/connect.php";
+include "includes/sidebar-admin.php";
 ?>
 
 <div class="jumbotron">
@@ -47,10 +48,6 @@ include "includes/connect.php";
 
 
 
-
-<?php
-include "includes/sidebar.php";
-?>
 
 <?php
 include "includes/footer.php";
