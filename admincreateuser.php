@@ -40,7 +40,15 @@ if(isset($_POST['submit'])){
 	$usrlevel= trim($_POST['user_level']);
 	$dpid="1";//set department ID temporarily
 	$rid="1";//set role ID temporarily 
-	$randpwd = rand(12345678,99999999);//generate random password for now
+	
+	//generate random password for registration purposes 8 characters length
+	function random_password( $length = 8 ) {
+    $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxy0123456789!£$%&*@:;.,/?#";//Strong password for security purposes
+    $rpwd = substr( str_shuffle( $chars ), 0, $length );
+    return $rpwd;
+}
+	$rpwd = random_password(8); //hold variable
+	
 			
 	//Check database query
 	$q = "SELECT * FROM users WHERE UName='$rusr' LIMIT 1;";
@@ -53,30 +61,43 @@ if(isset($_POST['submit'])){
 		} 
 		//If all fields have data
 		if (!empty($_POST)){
-			
-			//If the administrator has select a user access level then add to database
-			if($usrlevel!=0){
 				
-			$registrationQuery = mysqli_query($conn, "INSERT INTO users VALUES ('null', '$rusr','$randpwd','$rusrfname','$rusrlname','$rusremail', NOW(), '$usrlevel', '$dpid', '$rid');");
-			
-			//If adding record successful notify administrator and email the user their details
-			if ($registrationQuery) {
-				echo 'New user has been created';
-				
-				$from = "admin@natalienewman.co.uk"; //admin email address
-    			$subject = "Aggregate Application Portal account created";
-    			$message = $rusrfname . " " . $rusrlname . " your portal account has been created. Your current password is:" .$randpwd . " please log in to change your password";
+			//Validate fields entered - first name, surname and email
+			if (preg_match("/^[a-zA-Z ]*$/",$rusrfname)){
+				if (preg_match("/^[a-zA-Z ]*$/",$rusrlname)){
+					if (preg_match("/([\w\-]+\@[\w\-]+\.[\w\-]+)/",$rusremail)){
 
-   				 $headers = "From:" . $from; mail($rusremail,$subject,$message,$headers);
+  				 		//If the administrator has select a user access level then add to database
+						if($usrlevel!=0){
+				
+							$registrationQuery = mysqli_query($conn, "INSERT INTO users VALUES ('null', '$rusr','$rpwd','$rusrfname','$rusrlname','$rusremail', NOW(), '$usrlevel', '$dpid', '$rid');");
+			
+							//If adding record successful notify administrator and email the user their details
+							if ($registrationQuery) {
+								echo 'New user has been created';
+						
+								$from = "admin@natalienewman.co.uk"; //admin email address
+    							$subject = "Aggregate Application Portal account created";
+    							$message = $rusrfname . " " . $rusrlname . " your portal account has been created. Your current password is:" .$rpwd . " please log in to change your password";
+
+   							 $headers = "From:" . $from; mail($rusremail,$subject,$message,$headers);
  			
-			}else  die('Invalid query: ' . mysqli_error());
+							}else  die('Invalid query: ' . mysqli_error());
+						}
+						//If administrator has not chosen a user access level - let them know
+						else echo 'Please select a user access level value';
+					}
+					//Invalid formatting of email address warning
+					else echo 'Invalid email format';
+			} 
+			//Invalid formatting of users surname warning
+			else echo 'Only letters and white space allowed for users surname'; 
 		}
-		//If administrator has not chosen a user access level - let them know
-		else echo 'Please select a user access level value';
-		} 
-		//If administrator has not completed all fields - let them know
-		else echo'<div class="login-error">Please fill in all fields</div>';
-	}
-		
+		//Invalid formatting of users first name warning
+		else echo 'Only letters and white space allowed for users first name'; 
 
+	}
+	//If administrator has not completed all fields - let them know
+	else echo'<div class="login-error">Please fill in all fields</div>';
+}
 ?>
