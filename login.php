@@ -31,7 +31,7 @@ require("includes/connect.php");
 
 //if an admin or user session is already in progress then dont let them log in, redirect to 'index.php'
 if (isset($_SESSION['admin']) && ($_SESSION['admin'] == true) || isset($_SESSION['user']) && ($_SESSION['user'] == true)) {
-    header ("Location: index.php");     
+    echo "You are already logged in";     
     //if use not logged in then
  }else
     if ( trim($_POST['username_login']) AND trim($_POST['user_password']))
@@ -40,8 +40,8 @@ if (isset($_SESSION['admin']) && ($_SESSION['admin'] == true) || isset($_SESSION
 	$usr = (isset($_POST['username_login'])? $_POST['username_login']:null);
 	$pwd = (isset($_POST['user_password'])? $_POST['user_password']:null);
 
-	$usr = mysqli_escape_string($usr); //Prevent against SQL Injection by avoiding "\" being executed
-    $pwd = mysqli_escape_string($pwd); //Prevent against SQL Injection by avoiding "\" being executed
+	//$usr = mysqli_escape_string($usr); //Prevent against SQL Injection by avoiding "\" being executed
+  //  $pwd = mysqli_escape_string($pwd); //Prevent against SQL Injection by avoiding "\" being executed
 
 	if ($usr && $pwd){	
 		$epwd = $pwd;
@@ -55,6 +55,7 @@ if (isset($_SESSION['admin']) && ($_SESSION['admin'] == true) || isset($_SESSION
 				$dataBaseEmail = $userRow['UName'];
 				$dataBasePass = $userRow['Password'];	
 				$userGroup = $userRow['UserLevelID'];
+
 			}
 				
 		mysqli_free_result($resultset);
@@ -64,19 +65,24 @@ if (isset($_SESSION['admin']) && ($_SESSION['admin'] == true) || isset($_SESSION
 		if ($usr == $dataBaseEmail && $epwd == $dataBasePass){
 			//Now that we know they are activated ect, we can create a session based on their privlidges 
 			if ($userGroup ==1){ //ADMIN load the console 
-				header("Location: index.php");
 				$_SESSION['admin'] = true;
+				//header("Location: admincreateuser.php");
+				echo '<div class="login-error">You are an admin user <a href="adminindex.php">Admin</a>.</div>';
+				
+				//exit;
 			}else{ //Normal User
-				header ("Location: index.php");
 				$_SESSION['user'] = true;
-				$_SESSION['user'] = $dataBaseEmail;
+				$_SESSION['userEmail'] = $dataBaseEmail;
+				//header ("Location: index.php");
+				echo '<div class="login-error">You are a standard user <a href="index.php">Standard</a>.</div>';
+				//exit;
 				}  
 			}else{//user and pass do not match DB
 				echo '<div class="login-error">Incorrect Password, try again</div>';	 
 			}
 		}else{
 			echo '<div class="login-error">Error: There is no such user registered on the system. Please check the username and password entered.</div>';
-		}
+		} 
 	}
 }
 ?>
