@@ -10,7 +10,12 @@ include "includes/connect.php";
 	<p>Text</p>
 
 <?php echo $os?>
-<?php echo $user?>
+<?php 
+
+if(isset($_SESSION['user'])){
+  echo "Hello " .$_SESSION['userEmail'];
+}
+?>
 
 </div>
           

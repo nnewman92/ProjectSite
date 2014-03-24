@@ -40,15 +40,18 @@ if(isset($_POST['submit'])){
 	$usrlevel= trim($_POST['user_level']);
 	$dpid="1";//set department ID temporarily
 	$rid="1";//set role ID temporarily 
-	
+	$activate="0"; //set activate ID as 0 to show new user.
+	$confirm_code=md5(uniqid(rand())); //confirmation code
+	$minimum_lengthname="2";
+	$minimum_lengthemail="8";
+
 	//generate random password for registration purposes 8 characters length
-	function random_password( $length = 8 ) {
-    $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxy0123456789!£$%&*@:;.,/?#";//Strong password for security purposes
-    $rpwd = substr( str_shuffle( $chars ), 0, $length );
-    return $rpwd;
-}
+	function random_password($length = 8) {
+		$chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxy0123456789!£$%&*@?#";//Strong password for security purposes
+		$rpwd = substr(str_shuffle($chars), 0, $length);
+    	return $rpwd;
+	}
 	$rpwd = random_password(8); //hold variable
-	
 			
 	//Check database query
 	$q = "SELECT * FROM users WHERE UName='$rusr' LIMIT 1;";
@@ -59,10 +62,14 @@ if(isset($_POST['submit'])){
 		if ($rows==1){
 			echo '<div class="login-error">User is already registered, send <a href="forgottenpass.php">reset password</a> email.</div>';
 		} 
-		//If all fields have data
+	
+	if($rows==0){
+			//If all fields have data
 		if (!empty($_POST)){
 				
 			//Validate fields entered - first name, surname and email
+			
+			if(preg_match("/^[A-Za-z][A-Za-z0-9]*$/",$rusr)){
 			if (preg_match("/^[a-zA-Z ]*$/",$rusrfname)){
 				if (preg_match("/^[a-zA-Z ]*$/",$rusrlname)){
 					if (preg_match("/([\w\-]+\@[\w\-]+\.[\w\-]+)/",$rusremail)){
@@ -70,7 +77,7 @@ if(isset($_POST['submit'])){
   				 		//If the administrator has select a user access level then add to database
 						if($usrlevel!=0){
 				
-							$registrationQuery = mysqli_query($conn, "INSERT INTO users VALUES ('null', '$rusr','$rpwd','$rusrfname','$rusrlname','$rusremail', NOW(), '$usrlevel', '$dpid', '$rid');");
+							$registrationQuery = mysqli_query($conn, "INSERT INTO users VALUES ('null', '$rusr','$rpwd','$rusrfname','$rusrlname','$rusremail', NOW(), '$usrlevel', '$dpid', '$rid', '$activate', '$confirm_code');");
 			
 							//If adding record successful notify administrator and email the user their details
 							if ($registrationQuery) {
@@ -78,7 +85,7 @@ if(isset($_POST['submit'])){
 						
 								$from = "admin@natalienewman.co.uk"; //admin email address
     							$subject = "Aggregate Application Portal account created";
-    							$message = $rusrfname . " " . $rusrlname . " your portal account has been created. Your current password is:" .$rpwd . " please log in to change your password";
+    							$message = $rusrfname . " " . $rusrlname . " your portal account has been created. Your current password is:" .$rpwd . " please log in to change your password. http://www.natalienewman.co.uk/emailactivation.php?passkey=$confirm_code";
 
    							 $headers = "From:" . $from; mail($rusremail,$subject,$message,$headers);
  			
@@ -95,9 +102,11 @@ if(isset($_POST['submit'])){
 		}
 		//Invalid formatting of users first name warning
 		else echo 'Only letters and white space allowed for users first name'; 
-
-	}
+			}
+	else echo'Usernames must start with a letter';
+			}
 	//If administrator has not completed all fields - let them know
 	else echo'<div class="login-error">Please fill in all fields</div>';
+}
 }
 ?>
